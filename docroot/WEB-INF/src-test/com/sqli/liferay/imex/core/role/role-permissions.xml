@@ -1,0 +1,67 @@
+<role-permissions>
+	<portlet-permissions>
+			<portlet-resource>
+				<resource-name>rn</resource-name>
+				<action>
+					<action-id>ACTION_ID</action-id>
+					<!-- NONE, GROUP ou COMPANY -->
+					<scope>COMPANY</scope>
+					<communities>
+						<community-name>gn1</community-name>
+						<community-name>gn2</community-name>
+					</communities>
+				</action>
+				<action>
+					<action-id>ACTION_ID</action-id>
+					<!-- NONE, GROUP ou COMPANY -->
+					<scope>COMPANY</scope>
+					<communities>
+						<community-name>gn1</community-name>
+						<community-name>gn2</community-name>
+					</communities>
+				</action>
+			</portlet-resource>
+			<model-resource>
+				<resource-name>rn</resource-name>
+				<action>
+					<action-id>ACTION_ID</action-id>
+					<!-- NONE, GROUP ou COMPANY -->
+					<scope>COMPANY</scope>
+					<communities>
+						<community-name>gn1</community-name>
+						<community-name>gn2</community-name>
+					</communities>
+				</action>
+				<action>
+					<action-id>ACTION_ID</action-id>
+					<!-- NONE, GROUP ou COMPANY -->
+					<scope>COMPANY</scope>
+					<communities>
+						<community-name>gn1</community-name>
+						<community-name>gn2</community-name>
+					</communities>
+				</action>
+			</model-resource>
+			<model-resource>
+				<resource-name>rn</resource-name>
+				<action>
+					<action-id>ACTION_ID</action-id>
+					<!-- NONE, GROUP ou COMPANY -->
+					<scope>COMPANY</scope>
+					<communities>
+						<community-name>gn1</community-name>
+						<community-name>gn2</community-name>
+					</communities>
+				</action>
+				<action>
+					<action-id>ACTION_ID</action-id>
+					<!-- NONE, GROUP ou COMPANY -->
+					<scope>COMPANY</scope>
+					<communities>
+						<community-name>gn1</community-name>
+						<community-name>gn2</community-name>
+					</communities>
+				</action>
+			</model-resource>
+	</portlet-permissions>
+</role-permissions>

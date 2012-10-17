@@ -1,0 +1,14 @@
+<group>
+	<class-name>...</class-name>
+	<class-pk>...</class-pk>
+	<name>...</name>
+	<description>...</description>
+	<type>...</type>
+	<type-settings>
+		<property key="...">...</property>
+		<property key="...">...</property>	
+	</type-settings>
+	<friendly-url>...</friendly-url>
+	<site>...</site>
+	<active>...</active>
+</group>

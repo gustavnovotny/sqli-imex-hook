@@ -1,0 +1,25 @@
+<role-permissions>
+	<portlet-permissions>
+			<portlet-resource>
+				<resource-name>...</resource-name>
+				<action>...</action>
+				<action>...</action>
+			</portlet-resource>
+			<model-resource>
+				<resource-name></resource-name>
+				<action>...</action>
+				<action>
+					<action-id>...</action-id>
+					<!-- NONE, GROUP ou COMPANY -->
+					<scope>GROUP</scope>
+					<communities>
+						<community-name>...</community-name>
+						<community-name>...</community-name>
+					</communities>
+				</action>
+			</model-resource>
+			<model-resource>
+				...
+			</model-resource>
+	</portlet-permissions>
+</role-permissions>
