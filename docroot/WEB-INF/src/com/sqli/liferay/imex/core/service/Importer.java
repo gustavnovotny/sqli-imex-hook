@@ -6,7 +6,6 @@ import com.liferay.portal.model.Company;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.sqli.liferay.imex.core.group.GroupImportOptions;
 import com.sqli.liferay.imex.core.group.GroupImporter;
-import com.sqli.liferay.imex.core.group.GroupOptions;
 import com.sqli.liferay.imex.core.role.RoleImporter;
 
 import java.io.File;
@@ -53,7 +52,7 @@ public class Importer {
 			File rolesDir = new File(companyDir, Directories.ROLES);
 			File[] rolesDirs = rolesDir.listFiles();
 			for (File roleDir : rolesDirs) {
-				this.roleImporter.doImport(companyId, roleDir);
+				this.roleImporter.doImport(companyId, roleDir, options);
 			}
 			
 			// Sites

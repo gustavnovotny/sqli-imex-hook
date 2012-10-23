@@ -4,13 +4,17 @@ import com.liferay.portal.RolePermissionsException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
+import com.liferay.portal.model.Permission;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
@@ -46,6 +50,8 @@ import java.util.Set;
  */
 public class RolePermissionsServiceImpl implements RolePermissionsService {
 	
+	private static Log _log = LogFactoryUtil.getLog(RolePermissionsServiceImpl.class);
+	
 	@Override
 	public void updateRolePermissions(
 			long companyId,
@@ -56,7 +62,58 @@ public class RolePermissionsServiceImpl implements RolePermissionsService {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	public void reinitRolePermissions(long roleId, boolean reInit) throws PortalException, SystemException {
+		
+		if (reInit) {
+			
+			Role role = RoleLocalServiceUtil.getRole(roleId);
+	
+			if (!isUpdateableRole(role.getName())) {
+				throw new RolePermissionsException(role.getName());
+			}
+			
+			if (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 6) {			
+				reinitAction_6(role);
+			} else {
+				reinitAction_1to5(role);
+			}
+			
+		} else {
+			_log.debug("Permissions will not be reset for roleId=[" + roleId + "] after import.");
+		}
+		
+	}
+	
+	private void reinitAction_6(Role role) throws SystemException {
+		
+		long roleId = role.getRoleId();			
+	    List<ResourcePermission> liste = ResourcePermissionLocalServiceUtil.getRoleResourcePermissions(roleId);
+	    
+	    for (ResourcePermission resourcePermission : liste) {
+	    	
+	    	if (resourcePermission.getScope() != ResourceConstants.SCOPE_INDIVIDUAL) {
+	    		ResourcePermissionLocalServiceUtil.deleteResourcePermission(resourcePermission);
+	    	}
+	    	
+	    }
+				
+	}
+	
+	private void reinitAction_1to5(Role role) throws SystemException {
+
+		long roleId = role.getRoleId();			
+	    List<Permission> liste = PermissionLocalServiceUtil.getRolePermissions(roleId);
+	    
+	    for (Permission permission : liste) {
+	    	
+	    	if (permission.getScope() != ResourceConstants.SCOPE_INDIVIDUAL) {
+	    		PermissionLocalServiceUtil.deletePermission(permission);
+	    	}
+	    	
+	    }
+		
+	}
+	
 	private void updateActions(
 			long companyId,
 			long roleId,
@@ -104,7 +161,6 @@ public class RolePermissionsServiceImpl implements RolePermissionsService {
 	private void updateAction(Role role, String selResource, String actionId,
 			int scope, String[] groupIds) throws Exception {
 		
-			long scopeGroupId = 0;
 			boolean selected = true;
 		
 			if (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 6) {
@@ -138,7 +194,7 @@ public class RolePermissionsServiceImpl implements RolePermissionsService {
 				
 		RolePermissions result = new RolePermissions();
 		
-		List<Portlet> portlets = PortletLocalServiceUtil.getPortlets(companyId, false, false);
+		List<Portlet> portlets = PortletLocalServiceUtil.getPortlets(companyId, true, false);
 		
 		List<String> portletNames = new ArrayList<String>(portlets.size() + 1); 
 		for (Portlet portlet : portlets) {

@@ -1,6 +1,7 @@
 package com.sqli.liferay.imex.core.role.service;
 
-import com.sqli.liferay.imex.core.role.model.PortletPermissions;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.sqli.liferay.imex.core.role.model.RolePermissions;
 
 /**
@@ -35,5 +36,7 @@ public interface RolePermissionsService {
 			throws Exception;
 
 	public boolean isUpdateableRole(String roleName);
+	
+	public void reinitRolePermissions(long roleId, boolean reInitOnImport) throws PortalException, SystemException;
 
 }

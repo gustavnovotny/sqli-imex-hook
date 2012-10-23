@@ -6,6 +6,7 @@ import com.liferay.portal.model.Role;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.sqli.liferay.imex.core.FilesNames;
 import com.sqli.liferay.imex.core.role.model.ImExRole;
+import com.sqli.liferay.imex.core.service.ImportOptions;
 import com.sqli.liferay.imex.util.xml.SimpleXmlProcessor;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public class RoleImporter {
 		this.rolePermissionsImporter = new RolePermissionsImporter();
 	}
 
-	public void doImport(long companyId, File roleDir) throws Exception {
+	public void doImport(long companyId, File roleDir, ImportOptions options) throws Exception {
 		
 		SimpleXmlProcessor<ImExRole> xmlProcessor = new SimpleXmlProcessor<ImExRole>(ImExRole.class, roleDir, FilesNames.ROLE);	
 		ImExRole r = xmlProcessor.read();
@@ -43,7 +44,7 @@ public class RoleImporter {
 		
 		}
 	
-		this.rolePermissionsImporter.doImport(companyId, role.getRoleId(), roleDir);
+		this.rolePermissionsImporter.doImport(companyId, role.getRoleId(), roleDir, options);
 	}
 	
 	private void initializeLocale(String value, Map<java.util.Locale, String> map) {

@@ -12,9 +12,8 @@ public class LarImporter {
 		
 	}
 
-	public void doImport(Group group, File groupDir, boolean privateLayout, Map<String, String[]> parameterMap) throws Exception {
+	public void doImport(long userId, Group group, File groupDir, boolean privateLayout, Map<String, String[]> parameterMap) throws Exception {
 		
-		long userId = 0;
 		long groupId = group.getGroupId();
 
 		File file = LarNameUtil.getLarFile(group, groupDir, privateLayout);

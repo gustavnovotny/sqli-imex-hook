@@ -12,11 +12,11 @@ public abstract class Options<GROUP_OPTIONS extends GroupOptions> {
 
 	public void load(Properties props, String prefix) {
 		sitesEnabled = GetterUtil.getBoolean(props.getProperty(prefix + "sites.enabled"));
-		sitesOptions = newGroupOptions();
-		sitesOptions.load(props, prefix + "sites.");
+		sitesOptions = newGroupOptions(prefix + "sites.", props);
+		sitesOptions.load();
 	}
 	
-	abstract protected GROUP_OPTIONS newGroupOptions();
+	abstract protected GROUP_OPTIONS newGroupOptions(String prefix, Properties props);
 
 	public boolean isSitesEnabled() {
 		return sitesEnabled;

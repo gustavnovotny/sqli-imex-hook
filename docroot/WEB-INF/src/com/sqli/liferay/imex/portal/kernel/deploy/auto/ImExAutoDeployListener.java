@@ -2,6 +2,7 @@ package com.sqli.liferay.imex.portal.kernel.deploy.auto;
 
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployListener;
+import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -29,7 +30,12 @@ public class ImExAutoDeployListener implements AutoDeployListener {
 	
 	private ThreadLocal<File> temp = new ThreadLocal<File>();
 	
-	@Override
+	public void deploy(AutoDeploymentContext autoDeploymentContext) throws AutoDeployException {
+		
+		this.deploy(autoDeploymentContext.getFile(), autoDeploymentContext.getContext());
+		
+	}
+	
 	public void deploy(File file, String context) throws AutoDeployException {
 		
 		Properties config = new Properties();
