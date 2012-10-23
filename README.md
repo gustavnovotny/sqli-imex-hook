@@ -28,7 +28,7 @@ previous export: an import is automatically launched.
 
 License
 -------
-This library, *Liferay Portal Community Edition*, is free software ("Licensed
+This library, *SQLI Im/Ex for Liferay*, is free software ("Licensed
 Software"); you can redistribute it and/or modify it under the terms of the [GNU
 Lesser General Public License](http://www.gnu.org/licenses/lgpl-2.1.html) as
 published by the Free Software Foundation; either version 2.1 of the License, or
