@@ -1,8 +1,10 @@
 SQLI Im/Ex for Liferay EE 6.1 GA2
 =================================
 
-Configuring import / export directory
--------------------------------------
+Usage
+-----
+
+### Configuring import / export directory
 
 The portal property `sqli.imex.deploy.dir` define the base directory for imports 
 and exports. You can update this property in `portal-ext.properties` for example.
@@ -10,8 +12,7 @@ and exports. You can update this property in `portal-ext.properties` for example
 The default value is `${auto.deploy.deploy.dir}/imex`. Don't do any particular
 update if this default value is right for you.
 
-Export
-------
+### Export
 
 Put a file named `<some-basename>.export.properties` in directory 
 `${sqli.imex.deploy.dir}` : an export is automatically launched to a directory 
@@ -19,8 +20,7 @@ named `<some-name>`.
 At the end of the export process, the `<some-name>.export.properties` file is 
 renamed to `<some-name>.export.properties.done`.
 
-Import 
-------
+### Import 
 
 Put a file named `<some-name>.import.properties` in directory 
 `${sqli.imex.deploy.dir}` and a directory named `<some-name>`, got back from a 
