@@ -14,7 +14,7 @@ update if this default value is right for you.
 
 ### Export
 
-Put a file named `<some-basename>.export.properties` in directory 
+Put a file named `<some-name>.export.properties` in directory 
 `${sqli.imex.deploy.dir}` : an export is automatically launched to a directory 
 named `<some-name>`.
 At the end of the export process, the `<some-name>.export.properties` file is 
