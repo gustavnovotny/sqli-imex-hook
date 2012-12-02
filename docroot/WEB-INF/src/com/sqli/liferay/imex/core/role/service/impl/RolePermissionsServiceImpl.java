@@ -14,6 +14,13 @@
 
 package com.sqli.liferay.imex.core.role.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import com.liferay.portal.RolePermissionsException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -43,17 +50,9 @@ import com.sqli.liferay.imex.core.role.model.Action;
 import com.sqli.liferay.imex.core.role.model.PortletPermissions;
 import com.sqli.liferay.imex.core.role.model.Resource;
 import com.sqli.liferay.imex.core.role.model.RolePermissions;
-import com.sqli.liferay.imex.core.role.model.Scope;
 import com.sqli.liferay.imex.core.role.service.RolePermissionsService;
 import com.sqli.liferay.imex.portal.security.permission.ResourceActionsUtil;
 import com.sqli.liferay.imex.portal.util.PropsValues;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * 
@@ -154,8 +153,9 @@ public class RolePermissionsServiceImpl implements RolePermissionsService {
 			String selResource = resource.getResourceName();
 			
 			for (Action action : resource.getActionList()) {
+				
 				String actionId = action.getActionId();
-				int scope = action.getScope().getIntValue();
+				
 				Set<String> groupNames = action.getSitesNames();
 				String[] groupIds = new String[groupNames.size()];
 				int i = 0;
@@ -164,6 +164,8 @@ public class RolePermissionsServiceImpl implements RolePermissionsService {
 					groupIds[i] = Long.toString(group.getGroupId());
 					i++;
 				}
+				
+				int scope = getScope(role, groupIds);
 				
 				updateAction(
 						role,
@@ -399,11 +401,10 @@ public class RolePermissionsServiceImpl implements RolePermissionsService {
 		for (String actionId : actions) {
 			Action action = new Action();
 			action.setActionId(actionId);
-			Scope scope = getScope(company, role, resource, actionId);
-			action.setScope(scope);
-			if (allActions || !scope.equals(Scope.NONE)){
+			int scope = getScope(company, role, resource, actionId);
+			if (allActions || scope > 0){
 				r.getActionList().add(action);
-				if (scope.equals(Scope.GROUP)) {
+				if (scope == ResourceConstants.SCOPE_GROUP) {
 					LinkedHashMap<String, Object> groupParams = new LinkedHashMap<String, Object>();
 
 					List<Comparable> rolePermissions = new ArrayList<Comparable>();
@@ -431,7 +432,16 @@ public class RolePermissionsServiceImpl implements RolePermissionsService {
 		return r;
 	}
 	
-	private Scope getScope(Company company, Role role, String curResource, String actionId) throws PortalException, SystemException {
+	/**
+	 * @param company
+	 * @param role
+	 * @param curResource
+	 * @param actionId
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	private int getScope(Company company, Role role, String curResource, String actionId) throws PortalException, SystemException {
 		boolean hasCompanyScope = false;
 		boolean hasGroupTemplateScope = false;
 		boolean hasGroupScope = false;
@@ -447,19 +457,34 @@ public class RolePermissionsServiceImpl implements RolePermissionsService {
 			hasGroupScope = (role.getType() == RoleConstants.TYPE_REGULAR) && PermissionLocalServiceUtil.hasRolePermission(role.getRoleId(), company.getCompanyId(), curResource, ResourceConstants.SCOPE_GROUP, actionId);
 		}
 		
-		Scope result = null;
+		int scope = 0;
 		if (hasCompanyScope) {
-			result = Scope.COMPANY;
+			scope = ResourceConstants.SCOPE_COMPANY;
 		} else if (hasGroupTemplateScope) {
-			// TODO : revoir ça !!!
-			result = Scope.GROUP;
+			scope = ResourceConstants.SCOPE_GROUP_TEMPLATE;
 		} else if (hasGroupScope) {
-			result = Scope.GROUP;
-		} else {
-			result = Scope.NONE;
+			scope = ResourceConstants.SCOPE_GROUP;
 		}
 		
-		return result;
+		return scope;
+	}
+	
+	private int getScope(Role role, String[] groupIds) {
+		int scope = ResourceConstants.SCOPE_COMPANY;
+
+		if ((role.getType() == RoleConstants.TYPE_ORGANIZATION) ||
+			(role.getType() == RoleConstants.TYPE_PROVIDER) ||
+			(role.getType() == RoleConstants.TYPE_SITE)) {
+
+			scope = ResourceConstants.SCOPE_GROUP_TEMPLATE;
+		}
+		else {
+			if (groupIds.length > 0) {
+				scope = ResourceConstants.SCOPE_GROUP;
+			}
+		}
+		
+		return scope;
 	}
 
 	public boolean isUpdateableRole(String roleName) {
