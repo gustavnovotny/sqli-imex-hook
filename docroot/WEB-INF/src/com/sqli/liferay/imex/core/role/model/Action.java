@@ -18,7 +18,9 @@ import java.util.HashSet;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
+@Root(strict=false /* for backward compatibility */)
 public class Action {
 	
 	@Element
